@@ -15,6 +15,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PostDTO {
+	
+	private Integer postId;
 
 	private String title;
 
