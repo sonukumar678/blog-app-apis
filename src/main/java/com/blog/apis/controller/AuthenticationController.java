@@ -1,6 +1,7 @@
 package com.blog.apis.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +18,9 @@ import com.blog.apis.exceptions.ApiException;
 import com.blog.apis.exceptions.ResourceNotFoundException;
 import com.blog.apis.payload.JwtRequest;
 import com.blog.apis.payload.JwtResponse;
+import com.blog.apis.payload.UserDTO;
 import com.blog.apis.security.CustomUserDetailsService;
+import com.blog.apis.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -28,6 +31,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -61,6 +67,13 @@ public class AuthenticationController {
 			throw new ApiException("Invalid password !!");
 		}
 		
+	}
+	
+	//register new user
+	@PostMapping("/register")
+	public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO){
+		UserDTO registerUser = this.userService.registerUser(userDTO);
+		return new ResponseEntity<UserDTO>(registerUser, HttpStatus.CREATED);
 	}
 	
 
